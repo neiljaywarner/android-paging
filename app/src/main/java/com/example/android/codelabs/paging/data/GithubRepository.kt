@@ -32,7 +32,7 @@ class GithubRepository(
 ) {
 
     // keep the last requested page. When the request is successful, increment the page number.
-    private var lastRequestedPage = 1
+     private var lastRequestedPage = 1
 
     // LiveData of network errors.
     private val networkErrors = MutableLiveData<String>()
@@ -43,10 +43,12 @@ class GithubRepository(
     /**
      * Search repositories whose names match the query.
      */
+
+    // Remove the lastRequestedPage initialization and the call to requestAndSaveData(), but don't completely remove this function for now.
     fun search(query: String): RepoSearchResult {
         Log.d("GithubRepository", "New query: $query")
-        lastRequestedPage = 1
-        requestAndSaveData(query)
+        //lastRequestedPage = 1
+        //requestAndSaveData(query)
 
         // Get data from the local cache
         val data = cache.reposByName(query)
@@ -75,5 +77,6 @@ class GithubRepository(
 
     companion object {
         private const val NETWORK_PAGE_SIZE = 50
+        private const val DATABASE_PAGE_SIZE = 20
     }
 }
