@@ -18,6 +18,7 @@ package com.example.android.codelabs.paging.data
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import androidx.paging.LivePagedListBuilder
 import com.example.android.codelabs.paging.api.GithubService
 import com.example.android.codelabs.paging.api.searchRepos
 import com.example.android.codelabs.paging.db.GithubLocalCache
@@ -44,15 +45,14 @@ class GithubRepository(
      * Search repositories whose names match the query.
      */
 
-    // Remove the lastRequestedPage initialization and the call to requestAndSaveData(), but don't completely remove this function for now.
     fun search(query: String): RepoSearchResult {
-        Log.d("GithubRepository", "New query: $query")
-        //lastRequestedPage = 1
-        //requestAndSaveData(query)
+        // Get data source factory from the local cache
+        val dataSourceFactory = cache.reposByName(query)
 
-        // Get data from the local cache
-        val data = cache.reposByName(query)
+        // Get the paged list
+        val data = LivePagedListBuilder(dataSourceFactory, DATABASE_PAGE_SIZE).build()
 
+        // Get the network errors exposed by the boundary callback
         return RepoSearchResult(data, networkErrors)
     }
 
